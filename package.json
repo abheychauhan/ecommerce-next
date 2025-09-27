@@ -9,15 +9,24 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.8",
+    "@heroicons/react": "^2.2.0",
+    "bcryptjs": "^3.0.2",
+    "cookie": "^1.0.2",
+    "framer-motion": "^12.23.16",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.18.1",
+    "next": "15.5.3",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "next": "15.5.3"
+    "remixicon": "^4.6.0",
+    "stripe": "^18.5.0"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
     "eslint": "^9",
     "eslint-config-next": "15.5.3",
-    "@eslint/eslintrc": "^3"
+    "tailwindcss": "^4"
   }
 }
