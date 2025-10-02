@@ -3,13 +3,21 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function ProductsPage() {
+
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  const params = useSearchParams();
+  const category = params.get("category");
+  console.log(category)
 
   // Price filter states
   const [minPrice, setMinPrice] = useState("");
@@ -33,7 +41,21 @@ export default function ProductsPage() {
       }
     }
     fetchData();
+
   }, []);
+
+  useEffect(() => {
+  if (category) {
+      let tem = [...products];
+    if (category) {
+      tem = tem.filter((p) => p.category === category);
+      setSelectedCategory(category);
+    }
+    setFilteredProducts(tem);
+    console.log(tem)
+}
+  }, [category, products]);
+  
 
   const applyFilters = () => {
     let temp = [...products];
