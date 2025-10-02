@@ -5,6 +5,7 @@ import Link from "next/link";
 import { AuthContext } from "./context/AuthContext";
 import { useRouter } from "next/navigation";
 import Loading from "./components/Loading";
+import Image from "next/image";
 
 export default function Home() {
   const { user, loading } = useContext(AuthContext);
@@ -59,9 +60,11 @@ export default function Home() {
     href={`/products?category=${cat.name.toLowerCase()}`}
     className="bg-gray-100 rounded-lg shadow hover:shadow-lg p-6 flex flex-col justify-center items-center transition"
   >
-    <img
+    <Image
       src={`/images/${cat.img}`}
       alt={cat.name}
+      width={100}
+      height={100}
       className="h-full w-full object-center mb-4"
     />
     <p className="font-semibold text-lg">{cat.name}</p>
