@@ -1,28 +1,24 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import Loading from "../components/Loading";
-import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 
-export default function ProductsPage() {
-
+function ProductsPageContent() {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [loading, setLoading] = useState(true);
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
   const router = useRouter();
 
   const params = useSearchParams();
   const category = params.get("category");
-  console.log(category)
 
-  // Price filter states
-  const [minPrice, setMinPrice] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
-
+  // fetch products
   useEffect(() => {
     async function fetchData() {
       try {
@@ -31,7 +27,6 @@ export default function ProductsPage() {
         setProducts(data);
         setFilteredProducts(data);
 
-        // extract unique categories
         const uniqueCategories = ["all", ...new Set(data.map((p) => p.category))];
         setCategories(uniqueCategories);
       } catch (error) {
@@ -41,31 +36,24 @@ export default function ProductsPage() {
       }
     }
     fetchData();
-
   }, []);
 
+  // filter by query param
   useEffect(() => {
-  if (category) {
-      let tem = [...products];
     if (category) {
-      tem = tem.filter((p) => p.category === category);
+      let temp = [...products];
+      temp = temp.filter((p) => p.category === category);
       setSelectedCategory(category);
+      setFilteredProducts(temp);
     }
-    setFilteredProducts(tem);
-    console.log(tem)
-}
   }, [category, products]);
-  
 
   const applyFilters = () => {
     let temp = [...products];
 
-    // category filter
     if (selectedCategory !== "all") {
       temp = temp.filter((p) => p.category === selectedCategory);
     }
-
-    // price filter
     if (minPrice !== "") {
       temp = temp.filter((p) => p.price >= Number(minPrice));
     }
@@ -76,11 +64,14 @@ export default function ProductsPage() {
     setFilteredProducts(temp);
   };
 
-  if (loading) return <Loading/>;
+  if (loading) return <Loading />;
 
-  return products.length>0 ? (
-    <div className="p-8 pt-20 max-w-7xl mx-auto  text-gray-600">
-         <h1 className="" onClick={() => router.back()}><i className="text-2xl  hover:cursor-pointer text-blue-500 ri-arrow-left-line"></i></h1>
+  return products.length > 0 ? (
+    <div className="p-8 pt-20 max-w-7xl mx-auto text-gray-600">
+      <h1 onClick={() => router.back()}>
+        <i className="text-2xl hover:cursor-pointer text-blue-500 ri-arrow-left-line"></i>
+      </h1>
+
       {/* Filters */}
       <div className="mb-6 flex flex-wrap gap-4 items-center">
         {/* Category Filter */}
@@ -132,29 +123,41 @@ export default function ProductsPage() {
 
       {/* Products */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-6">
-         
-         { filteredProducts.map((product) => (
-            <Link
-              href={`/products/${product.id}`}
-              key={product.id}
-              className="border rounded-lg md:p-4 p-2 shadow hover:shadow-xl bg-white border-gray-200 hover:scale-105 transition-all duration-500"
-            >
-              <img
-                src={product.image}
-                alt={product.title}
-                className="w-full h-40 object-contain mb-3"
-              />
-              <h2 className="font-semibold text-xs md:text-lg">{product.title}</h2>
-              <p className="text-sm text-gray-500">{product.category}</p>
-              <p className="text-lg font-bold mt-2">${product.price}</p>
-            </Link>
-          ))}
-         
-        
+        {filteredProducts.map((product) => (
+          <Link
+            href={`/products/${product.id}`}
+            key={product.id}
+            className="border rounded-lg md:p-4 p-2 shadow hover:shadow-xl bg-white border-gray-200 hover:scale-105 transition-all duration-500"
+          >
+            <img
+              src={product.image}
+              alt={product.title}
+              className="w-full h-40 object-contain mb-3"
+            />
+            <h2 className="font-semibold text-xs md:text-lg">{product.title}</h2>
+            <p className="text-sm text-gray-500">{product.category}</p>
+            <p className="text-lg font-bold mt-2">${product.price}</p>
+          </Link>
+        ))}
       </div>
     </div>
-    ):(
-          <p className="p-20 text-xl text-gray-500 text-center">No products found. <button onClick={()=>(window.location.reload())} className=" bg-white border border-gray-200 px-4 py-2 rounded-xl hover:text-white hover:bg-blue-500 transition duration-500">retry</button></p>
-      )
-  
+  ) : (
+    <p className="p-20 text-xl text-gray-500 text-center">
+      No products found.{" "}
+      <button
+        onClick={() => window.location.reload()}
+        className="bg-white border border-gray-200 px-4 py-2 rounded-xl hover:text-white hover:bg-blue-500 transition duration-500"
+      >
+        retry
+      </button>
+    </p>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <ProductsPageContent />
+    </Suspense>
+  );
 }
