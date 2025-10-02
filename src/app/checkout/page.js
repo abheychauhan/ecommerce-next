@@ -21,7 +21,7 @@ export default function CheckoutPage() {
   }, [authLoading, user, router]);
 
   if (loading || authLoading) return <Loading />;
-  if (!cart.length) return <p className="p-8 text-center text-gray-500">Your cart is empty</p>;
+  if (!cart.length) return <p className="p-8 pt-20 text-center text-gray-500">Your cart is empty</p>;
 
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
@@ -60,7 +60,7 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div className="p-8 max-w-4xl mx-auto text-gray-600">
+    <div className="p-8 pt-20 max-w-4xl mx-auto text-gray-600">
       <h1 className="text-3xl font-bold mb-6">Checkout</h1>
 
       {/* Cart Summary */}

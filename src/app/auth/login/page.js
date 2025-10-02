@@ -32,11 +32,11 @@ export default function LoginPage() {
   };
 
   return (
-    <>
+    <div className="fixed p-10 bg-gray-100 w-full h-screen flex items-center justify-center ">
     <span className="text-red-400 absolute top-50 left-1/2 transform -translate-y-1/2 -translate-x-1/2   text-xl">
       {msg}
     </span>
-    <form onSubmit={handleSubmit} className="p-8 max-w-md mx-auto bg-white absolute transform -translate-y-1/2 left-1/2 top-1/2 -translate-x-1/2 rounded-xl hover:shadow-xl text-gray-500 shadow">
+    <form onSubmit={handleSubmit} className="p-8 md:max-w-md w-full mx-auto bg-white rounded-xl hover:shadow-xl text-gray-500 shadow">
       <h1 className="text-2xl font-bold mb-4">Login</h1>
       <input
         type="email"
@@ -64,6 +64,6 @@ export default function LoginPage() {
     </form>
 
 
-    </>
+    </div>
   );
 }
