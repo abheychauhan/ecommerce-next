@@ -5,7 +5,6 @@ import Link from "next/link";
 import { AuthContext } from "./context/AuthContext";
 import { useRouter } from "next/navigation";
 import Loading from "./components/Loading";
-import Image from "next/image";
 
 export default function Home() {
   const { user, loading } = useContext(AuthContext);
@@ -50,21 +49,19 @@ export default function Home() {
         </h2>
         <div className="grid grid-cols-2  md:grid-cols-4 gap-6 max-w-6xl mx-auto">
 {[
-  { name: "Electronics", img: "electronics.jpg" },
-  { name: "Jewelery", img: "jewelery.jpg" },
-  { name: "Men's Clothing", img: "men's clothing.jpg" },
-  { name: "Women's Clothing", img: "women's clothing.jpg" },
+  { name: "Electronics", img: "Electronics.jpg" },
+  { name: "Jewelery", img: "Jewelery.jpg" },
+  { name: "Men's Clothing", img: "Men's Clothing.jpg" },
+  { name: "Women's Clothing", img: "Women's Clothing.jpg" },
 ].map((cat) => (
   <Link
     key={cat.name}
     href={`/products?category=${cat.name.toLowerCase()}`}
     className="bg-gray-100 rounded-lg shadow hover:shadow-lg p-6 flex flex-col justify-center items-center transition"
   >
-    <Image
+    <img
       src={`/images/${cat.img}`}
       alt={cat.name}
-      width={100}
-      height={100}
       className="h-full w-full object-center mb-4"
     />
     <p className="font-semibold text-lg">{cat.name}</p>
